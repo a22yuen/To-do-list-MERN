@@ -1,4 +1,5 @@
 # To-Do-List
 
-A customizable to do list hosted on heroku, using dynamic pages to create any seperate to do list with an inputed name  
-Ues Mongo DB Atlas to store the information
+To do list created with React
+Soon to upload to heroku and implement dynamic rendering
+Uses Mongo DB Atlas to store the information
