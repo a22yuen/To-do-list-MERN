@@ -10,7 +10,7 @@ function App() {
     <div>
       <Router>
         <Route path="/" component={List} />
-        {/* <Route path="/:listName" component={itemList} /> */}
+        {/* <Route path="/:listName" component={itemList()} /> */}
       </Router>
       <Footer />
     </div>

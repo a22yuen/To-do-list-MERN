@@ -36,6 +36,13 @@ h1 {
 
 button.delete{
   margin: 20px;
+  padding: 8px;
+  border-radius: 100%;
+  border-width: 0;
+}
+
+button.delete:hover{
+  background-color:#456268;
 }
 
 p {

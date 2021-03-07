@@ -28,9 +28,7 @@ const item3 = new Item({ name: "<-- Hit this to delete an item" });
 const defaultItems = [item1, item2, item3];
 
 app.get("/", function (req, res) {
-
   Item.find({}, function (err, items) {
-
     if (items.length === 0) {
       Item.insertMany(defaultItems, function (err) {
         if (err) {
@@ -48,7 +46,6 @@ app.get("/", function (req, res) {
 });
 
 app.post("/", function(req, res){
-  console.log(req.body);
   const itemName = req.body.newItem;
   const item = new Item({ name: itemName });
   

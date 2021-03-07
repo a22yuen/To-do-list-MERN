@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Item from "./Item"
 import axios from 'axios';
 
@@ -6,35 +6,41 @@ function List() {
 
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
-
-  axios.get("http://localhost:5000/")
+  const [changed, setChanged] = useState(false); 
+  
+  useEffect(() => {
+    axios.get("http://localhost:5000/")
     .then(response => {
       setItems(response.data);
     })
     .catch(error => {
       console.log(error);
     })
+  },[changed]);
+
 
   function deleteItem(id) {
     axios.delete('http://localhost:5000/delete/' + id)
-      .then(response => { console.log(response.data) });
-
+      .then(response => { console.log(response.data) })
+      .catch(err => {console.log(err)})
     setItems(items.filter(item => item._id !== id));
   };
 
-  function createItem(){
-    axios.post('http://localhost:5000/', {newItem: newItem})
-      .then(res => console.log(res.data));
+  function createItem() {
+    axios.post('http://localhost:5000/', { newItem: newItem })
+      .then(res => console.log(res.data))
     setNewItem("");
+    setTimeout(() => {changed ? setChanged(false) : setChanged(true)}, 50);
   }
 
   function taskList() {
-    return items.map((currentItem, index) => {
+    console.log(items + "list");
+    return items.map(currentItem => {
       return <Item itemName={currentItem.name} key={currentItem._id} id={currentItem._id} delete={deleteItem} />
     })
   };
 
-  function change(e){
+  function change(e) {
     setNewItem(e.target.value);
   }
 
@@ -45,7 +51,6 @@ function List() {
       </div>
       <div className="box itemList">
         {taskList()}
-
         <input type="text" name="newItem" onChange={change} value={newItem} placeholder="New Item" autoComplete="off" />
         <button className="new" onClick={createItem}>+</button>
       </div>
