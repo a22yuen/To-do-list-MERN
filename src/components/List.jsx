@@ -14,7 +14,7 @@ function List() {
       setItems(response.data);
     })
     .catch(error => {
-      console.log(error);
+      console.log("effect" + error);
     })
   },[changed]);
 
@@ -22,19 +22,22 @@ function List() {
   function deleteItem(id) {
     axios.delete('http://localhost:5000/delete/' + id)
       .then(response => { console.log(response.data) })
-      .catch(err => {console.log(err)})
+      .catch(err => {console.log("deleteItem" + err)})
     setItems(items.filter(item => item._id !== id));
   };
 
   function createItem() {
     axios.post('http://localhost:5000/', { newItem: newItem })
       .then(res => console.log(res.data))
+    console.log("created item");
     setNewItem("");
-    setTimeout(() => {changed ? setChanged(false) : setChanged(true)}, 50);
+    setTimeout(() => {changed ? setChanged(false) : setChanged(true)}, 100);
   }
 
   function taskList() {
-    console.log(items + "list");
+    if(items.length === 0){
+      return;
+    }
     return items.map(currentItem => {
       return <Item itemName={currentItem.name} key={currentItem._id} id={currentItem._id} delete={deleteItem} />
     })
