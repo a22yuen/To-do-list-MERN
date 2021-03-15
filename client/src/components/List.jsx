@@ -7,8 +7,10 @@ function List() {
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
 
+  const url = "https://to-do-list-backend-api.herokuapp.com/";
+
   useEffect(async () => {  
-    const { data } = await axios.get("http://localhost:5000/")
+    const { data } = await axios.get(url);
     setItems(data);
   }, []);
 
@@ -17,13 +19,13 @@ function List() {
   }, [items]);
 
   const deleteItem = async (id) => {
-    await axios.delete('http://localhost:5000/delete/' + id);
+    await axios.delete(`${url}delete/${id}`);
     setItems(items.filter(item => item._id !== id));
   };
 
   const createItem = async () => {
     console.log("clicked");
-    const { data } = await axios.post('http://localhost:5000/', { newItem: newItem });
+    const { data } = await axios.post(url, { newItem: newItem });
     setItems([...items, data]);
   }
 
