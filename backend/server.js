@@ -25,18 +25,12 @@ const item1 = new Item({ name: "Welcome to your To-do List!" });
 const item2 = new Item({ name: "Hit + to add a new button" });
 const item3 = new Item({ name: "<-- Hit this to delete an item" });
 
-const defaultItems = [item1, item2, item3];
-
-app.get("/", function (req, res) {
-  Item.find({}, function (err, items) {
-    if (items.length === 0) {
-      Item.insertMany(defaultItems, function (err) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log("successfully added items");
-        }
-      });
+app.get("/", async function (req, res) {
+  await Item.find({}, function (err, items) {
+    if (err) {
+      console.log("find" + err);
+    }
+    else if (items.length === 0) {
       item1.save();
       item2.save();
       item3.save(() => res.json(items));
@@ -45,70 +39,26 @@ app.get("/", function (req, res) {
   })
 });
 
-app.post("/", function(req, res){
+app.post("/", async function (req, res) {
   const itemName = req.body.newItem;
   const item = new Item({ name: itemName });
-  
-  item.save();
+
+  await item.save();
+  res.json(item);
 
 });
 
-// app.post("/:title", function(req,res){
-//   List.findOne({name: listName}, function(err, foundList){
-//     foundList.items.push(item);
-//     foundList.save();
-//     res.redirect("/" + listName);
-//   })
-// });
+app.delete("/delete/:id", async function (req, res) {
 
-app.delete("/delete/:id", function (req, res) {
-
-  Item.findByIdAndDelete(req.params.id, function (err) {
+  await Item.findByIdAndDelete(req.params.id, function (err) {
     if (err) {
-      console.log(err);
+      console.log("delete" + err);
     } else {
-      console.log("success");
+      res.json({ message: "successfully deleted" });
     }
   });
 }
 );
-
-// app.delete("/:title/:key" , function(req,res){
-//   List.findOneAndUpdate(
-//     {name: listName},
-//     {$pull: {items: {_id: checkedItemID}}},
-//     function(err, foundList){
-//       if(!err){
-//         res.redirect("/" + listName);
-//       }
-//     }
-//   );
-// }
-
-
-// app.get("/:title", function(req,res){
-//   const newPage = _.capitalize(req.params.title);
-
-//   List.findOne({name: newPage}, function(err, list){
-//     if(!err){
-//       if(!list){
-//         const list = new List({
-//           name: newPage,
-//           items: defaultItems
-//         });
-//         list.save();
-//         res.redirect("/" + newPage)
-//       } else {
-//         res.render("list", {listTitle: list.name, newListItems: list.items});
-//       }
-//     }
-//   });
-// });
-
-
-
-
-
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

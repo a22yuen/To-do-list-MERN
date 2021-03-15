@@ -1,5 +1,4 @@
 # To-Do-List
 
-To do list created with React
+To do list created with MongoDB Atlas, React, Express and Node     
 Soon to upload to heroku and implement dynamic rendering
-Uses Mongo DB Atlas to store the information

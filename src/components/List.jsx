@@ -6,36 +6,29 @@ function List() {
 
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
-  const [changed, setChanged] = useState(false); 
-  
+
+  useEffect(async () => {  
+    const { data } = await axios.get("http://localhost:5000/")
+    setItems(data);
+  }, []);
+
   useEffect(() => {
-    axios.get("http://localhost:5000/")
-    .then(response => {
-      setItems(response.data);
-    })
-    .catch(error => {
-      console.log("effect" + error);
-    })
-  },[changed]);
+    setNewItem("");
+  }, [items]);
 
-
-  function deleteItem(id) {
-    axios.delete('http://localhost:5000/delete/' + id)
-      .then(response => { console.log(response.data) })
-      .catch(err => {console.log("deleteItem" + err)})
+  const deleteItem = async (id) => {
+    await axios.delete('http://localhost:5000/delete/' + id);
     setItems(items.filter(item => item._id !== id));
   };
 
-  function createItem() {
-    axios.post('http://localhost:5000/', { newItem: newItem })
-      .then(res => console.log(res.data))
-    console.log("created item");
-    setNewItem("");
-    setTimeout(() => {changed ? setChanged(false) : setChanged(true)}, 100);
+  const createItem = async () => {
+    console.log("clicked");
+    const { data } = await axios.post('http://localhost:5000/', { newItem: newItem });
+    setItems([...items, data]);
   }
 
   function taskList() {
-    if(items.length === 0){
+    if (items.length === 0) {
       return;
     }
     return items.map(currentItem => {
