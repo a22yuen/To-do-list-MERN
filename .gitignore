@@ -2,7 +2,7 @@ node_modules/
 npm-debug.log
 .DS_Store
 /server/.env/
-/server/.git0
+/server/.git
 list.ejs
 oldapp.js
 client-build
